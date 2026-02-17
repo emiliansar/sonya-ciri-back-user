@@ -1,0 +1,69 @@
+generator client {
+  provider      = "prisma-client"
+  output        = "../src/generated/prisma"
+}
+
+datasource db {
+  provider      = "postgresql"
+}
+
+model User {
+  id          Int @default(autoincrement()) @id
+  unique_name String @unique
+  first_name  String
+  last_name   String
+  chronotypes Chronotype[]
+  chronoform    Chronoform[]
+  charts      Chart[]
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+}
+
+model Chronotype {
+  id          Int @default(autoincrement()) @id
+  user_id     Int @unique
+  user        User @relation(fields: [user_id], references: [id])
+  type        String
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+}
+
+model Chronoform {
+  id                  Int @default(autoincrement()) @id
+  user_id             Int @unique
+  user                User @relation(fields: [user_id], references: [id])
+  age                 Int
+  tag                 String
+  time_wake_up        Int
+  time_to_bed         Int
+  sleep_quality       Int
+  time_great          Int[]
+  exam_time           Int[]
+  exercise_time       Int[]
+  important_meal_type String
+  important_meal_time Int[]
+  energy_decline      String
+  early_rise          String
+  daytime_sleep       String
+  state_morning       String
+  daily_routine       String
+  when_tired          Int[]
+  me_desc             String
+  great_day_desc      String
+  created_at          DateTime @default(now())
+  updated_at          DateTime @updatedAt
+}
+
+model Chart {
+  id      Int @default(autoincrement()) @id
+  user_id Int @unique
+  user    User @relation(fields: [user_id], references: [id])
+  chart   Json @default("[]")
+}
+
+model Admin {
+  id          Int @default(autoincrement()) @id
+  unique_name String @unique
+  first_name  String
+  last_name   String
+}
