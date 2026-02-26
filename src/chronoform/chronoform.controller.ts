@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Request, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Post, Request, UseGuards } from '@nestjs/common';
 import { ChronoformService } from './chronoform.service';
 import { AuthGuard } from 'src/auth/guards/jwt.guard';
 import { chronoformCreateControllerDto } from './dto/chronoform.dto';
@@ -30,8 +30,9 @@ export class ChronoformController {
     });
   }
 
+  @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)
-  @Post('delete')
+  @Delete('delete')
   async deleteProfile(
     @Request() req
   ) {

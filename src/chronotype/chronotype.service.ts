@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { ChronoformResponseDto } from 'src/chronoform/dto/chronoform.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
@@ -7,6 +7,18 @@ export class ChronotypeService {
     constructor(
         private readonly prisma: PrismaService
     ) {}
+
+    async getChronotype(userId: number) {
+        const chronotype = await this.prisma.chronotype.findUnique({
+            where: { user_id: userId }
+        });
+
+        if (!chronotype) {
+            throw new NotFoundException('Хронотип не найден');
+        }
+
+        return chronotype;
+    }
 
     async updateChronotype(chronoformId: number) {
         if (!chronoformId) {
@@ -177,15 +189,15 @@ export class ChronotypeService {
         }
 
         if (
-            chronoform.early_rise === 'Часто, если это возможно'
+            chronoform.daytime_sleep === 'Часто, если это возможно'
         ) {
             lark++;
         } else if (
-            chronoform.early_rise === 'Да, иногда'
+            chronoform.daytime_sleep === 'Да, иногда'
         ) {
             pigeon++;
         }else if (
-            chronoform.early_rise === 'Никогда'
+            chronoform.daytime_sleep === 'Никогда'
         ) {
             owl++;
         }
