@@ -3,19 +3,12 @@ FROM node:22-alpine AS builder
 
 WORKDIR /usr/src/app
 
-# Копируем package.json и yarn.lock
 COPY package.json yarn.lock ./
-
-# Устанавливаем зависимости
 RUN yarn install --frozen-lockfile
 
-# Копируем исходный код
 COPY . .
 
-# Генерируем Prisma клиент
 RUN npx prisma generate
-
-# Собираем приложение
 RUN yarn build
 
 # Финальная стадия
@@ -30,14 +23,9 @@ COPY --from=builder /usr/src/app/package.json ./
 COPY --from=builder /usr/src/app/entry.sh ./
 COPY --from=builder /usr/src/app/prisma ./prisma
 
-# Даем права на выполнение
 RUN chmod +x entry.sh
 
-# Переменные окружения для Prisma
-ENV DATABASE_URL=${DATABASE_URL}
+# Важно: порт для backend-user (3000) и backend-admin (3001) должен совпадать с тем, что в .env и docker-compose
+EXPOSE 3001
 
-# Открываем порт
-EXPOSE 3000
-
-# Запускаем приложение
 ENTRYPOINT [ "./entry.sh" ]
