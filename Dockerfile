@@ -17,7 +17,7 @@ FROM node:22-alpine
 WORKDIR /usr/src/app
 
 # Копируем собранные файлы и зависимости
-COPY --from=builder /usr/src/app/dist/src ./dist
+COPY --from=builder /usr/src/app/dist /usr/src/app/dist
 COPY --from=builder /usr/src/app/node_modules ./node_modules
 COPY --from=builder /usr/src/app/package.json ./
 COPY --from=builder /usr/src/app/entry.sh ./
