@@ -33,6 +33,9 @@ COPY --from=builder /usr/src/app/prisma ./prisma
 # Даем права на выполнение
 RUN chmod +x entry.sh
 
+# Переменные окружения для Prisma
+ENV DATABASE_URL=${DATABASE_URL}
+
 # Открываем порт
 EXPOSE 3000
 
