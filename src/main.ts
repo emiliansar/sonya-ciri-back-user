@@ -7,12 +7,12 @@ async function bootstrap() {
 
   app.setGlobalPrefix('api');
 
-  app.useGlobalPipes(new ValidationPipe({
-    transform: true,
-    transformOptions: {
-      enableImplicitConversion: true,  // преобразует "123" → 123
-    },
-  }));
+  // app.useGlobalPipes(new ValidationPipe({
+  //   transform: true,
+  //   transformOptions: {
+  //     enableImplicitConversion: true,  // преобразует "123" → 123
+  //   },
+  // }));
 
   const port = process.env.PORT || 3000;
   await app.listen(port);
